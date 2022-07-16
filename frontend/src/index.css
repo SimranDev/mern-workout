@@ -4,4 +4,12 @@
 
 body {
   margin: 0;
+  background-color: #e5e7eb;
+}
+
+.workout-form label {
+  @apply font-semibold text-gray-700;
+}
+.workout-form input {
+  @apply p-2 mt-1 w-full rounded-md;
 }
