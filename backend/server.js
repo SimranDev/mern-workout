@@ -1,11 +1,13 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const workoutRoutes = require("./routes/workouts");
 
 const app = express();
 
+app.use(cors());
 //middleware
 //express.json parses the incoming request with JSON payloads
 app.use(express.json());
