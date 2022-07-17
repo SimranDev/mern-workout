@@ -7,7 +7,7 @@ const getWorkouts = async (req, res) => {
     const workouts = await Workout.find({}).sort({ createdAt: -1 });
     res.json(workouts);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -18,18 +18,35 @@ const getSingleWorkout = async (req, res) => {
     const workout = await Workout.findById(id);
     res.json(workout);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
 //create new workout
 const createWorkout = async (req, res) => {
-  const { title, reps, load } = req.body;
+  const { title, load, reps } = req.body;
+
+  const emptyFields = [];
+  if (!title) {
+    emptyFields.push("Title");
+  }
+  if (!reps) {
+    emptyFields.push("Reps");
+  }
+  if (!load) {
+    emptyFields.push("Load");
+  }
+  if (emptyFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: `Missing ${emptyFields.join(", ")}`, emptyFields });
+  }
+
   try {
-    const workout = await Workout.create({ title, reps, load });
+    const workout = await Workout.create({ title, load, reps });
     res.status(200).json(workout);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
@@ -44,7 +61,7 @@ const deleteWorkout = async (req, res) => {
   const workout = await Workout.findOneAndDelete({ _id: id });
 
   if (!workout) {
-    res.status(400).json({ message: "No such workout to delete!" });
+    res.status(400).json({ error: "No such workout to delete!" });
   }
 
   res.status(200).json(workout);
@@ -60,7 +77,7 @@ const updateWorkout = async (req, res) => {
     );
     res.status(200).json(workout);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
