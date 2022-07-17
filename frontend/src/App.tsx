@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 function App() {
   return (
     <BrowserRouter>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
